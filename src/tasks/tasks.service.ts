@@ -26,4 +26,8 @@ export class TasksService {
         
         return task;
     }
+
+    getOneTask(id:string): Task {
+        return this.tasks.find((task) => task.id == id);
+    };
 }

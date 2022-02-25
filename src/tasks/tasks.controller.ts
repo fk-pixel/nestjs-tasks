@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { Task } from './task.model';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -18,9 +18,9 @@ export class TasksController {
         return this.tasksService.createTask(createTaskDto);
   }
 
-  @Get()
-  getOneTask(id: number) {
-    return `${id}`;
+  @Get('/:id')
+  getOneTask(@Param('id') id:string): Task {
+    return this.tasksService.getOneTask(id);
   }
 
   @Patch()
