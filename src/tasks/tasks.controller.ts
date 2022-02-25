@@ -1,33 +1,37 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Delete, Get, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common';
 import { TasksService } from './tasks.service';
+import { Task } from './task.model';
 
 @Controller('tasks')
 export class TasksController {
-    constructor(private tasksService: TasksService) {}
+  constructor(private tasksService: TasksService) {}
 
-    @Get() 
-    getAllTasks() {
-        return this.tasksService.getAllTasks();
-    }
+  @Get()
+  getAllTasks(): Task[] {
+    return this.tasksService.getAllTasks();
+  }
 
-    @Post()
-    createtask() {
-        return ;
-    }
+  @Post()
+  createTask(
+      @Body('title') title: string, 
+      @Body('description') description: string,
+      ): Task {
+        return this.tasksService.createTask(title, description);
+  }
 
-    @Get()
-    getOneTask(id: number) {
-        return `${id}`;
-    }
+  @Get()
+  getOneTask(id: number) {
+    return `${id}`;
+  }
 
-    @Patch()
-    updateTask(id: number) {
-        return `${id}`;
-    }
+  @Patch()
+  updateTask(id: number) {
+    return `${id}`;
+  }
 
-    @Delete()
-    deleteTask(id: number) {
-        return `${id}`
-    }
+  @Delete()
+  deleteTask(id: number) {
+    return `${id}`;
+  }
 }
