@@ -28,6 +28,10 @@ export class TasksService {
     }
 
     getOneTask(id:string): Task {
-        return this.tasks.find((task) => task.id == id);
+        return this.tasks.find((task) => task.id === id);
     };
+
+    deleteTask(id:string): void {
+        this.tasks.filter((task) => task.id !== id);
+    }
 }
