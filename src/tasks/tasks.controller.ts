@@ -48,4 +48,9 @@ export class TasksController {
   getTaskOne(@Param('id') id: string): Promise<Task> {
     return this.tasksService.getOneTask(id);
   }
+
+  @Post()
+  createTask(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
+    return this.tasksService.createTask(createTaskDto);
+  }
 }
