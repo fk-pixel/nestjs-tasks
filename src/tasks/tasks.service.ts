@@ -85,16 +85,25 @@ export class TasksService {
         return found;
     }
 
-    async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
-        const { title, description } = createTaskDto;
+    createTask(createTaskDto: CreateTaskDto): Promise<Task> {
+        return this.tasksRepo.createTask(createTaskDto);
+    }
 
-        const task = this.tasksRepo.create({
-            title,
-            description,
-            status: TaskStatus.OPEN,
-        });
+    async deleteTask(id:string): Promise<void>{
+        const result = await this.tasksRepo.delete(id); 
+        
+        if (result.affected === 0) {
+            throw new NotFoundException(`Task with ID "${id}" not found`);
+        }
+    }
+
+    async updateTaskStatus(id: string, status: TaskStatus): Promise<Task> {
+        const task = await this.getOneTask(id); //return an error as 404
+        
+        task.status = status;
 
         await this.tasksRepo.save(task);
+
         return task;
     }
 }
