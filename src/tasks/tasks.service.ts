@@ -106,4 +106,8 @@ export class TasksService {
 
         return task;
     }
+
+    getTasks(filterDto: GetTasksFilterDto): Promise<Task[]> {
+        return this.tasksRepo.getTasks(filterDto)
+    }
 }

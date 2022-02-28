@@ -43,6 +43,10 @@ export class TasksController {
   deleteTask(@Param('id') id: string): void {
     return this.tasksService.deleteTask(id);
   } */
+  @Get()
+  getTasks(@Query() filterDto: GetTasksFilterDto): Promise<Task[]> {
+    return this.tasksService.getTasks(filterDto);
+  }
 
   @Get('/:id')
   getTaskOne(@Param('id') id: string): Promise<Task> {
