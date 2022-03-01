@@ -6,6 +6,7 @@ import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { TasksRepository } from './tasks.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from './entity/task.entity';
+import { User } from 'src/auth/entity/user.entity';
 
 @Injectable()
 export class TasksService {
@@ -75,8 +76,8 @@ export class TasksService {
         task.status = status;
         return task;
     } */
-    async getOneTask(id:string): Promise<Task> {
-        const found = await this.tasksRepo.findOne(id);
+    async getOneTask(id:string, user: User): Promise<Task> {
+        const found = await this.tasksRepo.findOne({where: {id, user}});
 
         if (!found) {
             throw new NotFoundException(`Task with "${id}" not found`);
@@ -85,20 +86,20 @@ export class TasksService {
         return found;
     }
 
-    createTask(createTaskDto: CreateTaskDto): Promise<Task> {
-        return this.tasksRepo.createTask(createTaskDto);
+    createTask(createTaskDto: CreateTaskDto, user: User): Promise<Task> {
+        return this.tasksRepo.createTask(createTaskDto, user);
     }
 
-    async deleteTask(id:string): Promise<void>{
-        const result = await this.tasksRepo.delete(id); 
+    async deleteTask(id:string, user: User): Promise<void>{
+        const result = await this.tasksRepo.delete({id, user}); 
         
         if (result.affected === 0) {
             throw new NotFoundException(`Task with ID "${id}" not found`);
         }
     }
 
-    async updateTaskStatus(id: string, status: TaskStatus): Promise<Task> {
-        const task = await this.getOneTask(id); //return an error as 404
+    async updateTaskStatus(id: string, status: TaskStatus, user: User): Promise<Task> {
+        const task = await this.getOneTask(id, user); //return an error as 404
         
         task.status = status;
 
@@ -107,7 +108,7 @@ export class TasksService {
         return task;
     }
 
-    getTasks(filterDto: GetTasksFilterDto): Promise<Task[]> {
-        return this.tasksRepo.getTasks(filterDto)
+    getTasks(filterDto: GetTasksFilterDto, user: User): Promise<Task[]> {
+        return this.tasksRepo.getTasks(filterDto, user)
     }
 }
